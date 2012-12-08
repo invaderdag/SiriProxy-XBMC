@@ -47,38 +47,6 @@ class SiriProxy::Plugin::XBMC < SiriProxy::Plugin
     @xbmc = XBMCLibrary.new(@roomlist, appname)
   end
 
-  #show plugin status
-  listen_for /[xX] *[bB] *[mM] *[cC] *(.*)/i do |roomname|
-    roomname = roomname.downcase.strip
-    roomcount = @roomlist.keys.length
-
-    if (roomcount > 1 && roomname == "")
-      say "You have #{roomcount} rooms, here is their status:"
-
-      @roomlist.each { |name,room|
-        if (@xbmc.connect(name))
-          say "[#{name}] Online", spoken: "The #{name} is online"
-        else
-          say "[#{name}] Offline", spoken: "The #{name} is offline"
-        end
-      }
-    else
-      if (roomname == "")
-        roomname = @roomlist.keys.first
-      end
-      if (roomname != "" && roomname != nil && @roomlist.has_key?(roomname))
-        if (@xbmc.connect(roomname))
-          say "XBMC is online"
-        else 
-          say "XBMC is offline, please check the plugin configuration and check if XBMC is running"
-        end
-      else
-        say "There is no room defined called \"#{roomname}\""
-      end
-    end
-    request_completed #always complete your request! Otherwise the phone will "spin" at the user!
-  end
-
   # stop playing
   listen_for /^stop/i do 
     if (@xbmc.connect(@active_room))
