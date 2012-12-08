@@ -129,7 +129,7 @@ class SiriProxy::Plugin::XBMC < SiriProxy::Plugin
   end  
 
   #play movie or episode
-  listen_for /[xX] *[bB] *[mM] *[cC] play (.+?)(?: in the (.*))?$/i do |title,roomname|
+  listen_for /[xX] *[bB] *[mM] *[cC] *(.*) play (.+?)(?: in the (.*))?$/i do |title,roomname|
     if (roomname == "" || roomname == nil)
       roomname = @active_room
     else
